@@ -1,0 +1,1 @@
+const String defaultUrl = 'https://pokeapi.co/api/v2/pokemon';
