@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pokedex/home/data/model/pokemon_model.dart';
 import 'package:pokedex/home/presentation/view_model/home_view_model.dart';
+import 'package:pokedex/info/presentation/page/info_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late HomeViewModelImpl homeModel;
+  late HomeViewModel homeModel;
 
   @override
   void initState() {
@@ -34,8 +35,7 @@ class _HomePageState extends State<HomePage> {
               return Scaffold(
                 persistentFooterButtons: [
                   IconButton(
-                    enableFeedback:
-                        snapshot.data?.previous?.isNotEmpty ?? false,
+                    enableFeedback: snapshot.data?.previous?.isNotEmpty ?? false,
                     onPressed: () {
                       homeModel.getPage(false);
                     },
@@ -48,9 +48,15 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
                 body: ListView.builder(
+                  shrinkWrap: true,
                   itemCount: results.length,
                   itemBuilder: (context, index) {
                     return ListTile(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute<void>(
+                          builder: (BuildContext context) => InfoPage(results[index]),
+                        ));
+                      },
                       title: Text('${results[index].name}'),
                     );
                   },

@@ -10,7 +10,6 @@ abstract class HomeViewModel {
   Future<void> getPage([bool isNext]);
 }
 
-
 class HomeViewModelImpl implements HomeViewModel {
   HomeViewModelImpl(this._apiRepository);
 

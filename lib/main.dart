@@ -5,11 +5,14 @@ import 'package:pokedex/data/repository/api_repository_impl.dart';
 import 'package:pokedex/home/presentation/page/home_page.dart';
 import 'package:pokedex/home/presentation/view_model/home_view_model.dart';
 import 'package:pokedex/config/theme.dart';
+import 'package:pokedex/info/presentation/view_model/info_view_model.dart';
 
 void main() {
   GetIt.I.registerSingleton<ApiRepository>(ApiRepositoryImpl());
-  GetIt.I.registerFactory<HomeViewModelImpl>(
+  GetIt.I.registerFactory<HomeViewModel>(
       () => HomeViewModelImpl(GetIt.I.get()));
+  GetIt.I.registerSingleton<InfoViewModel>(InfoViewModelImpl(GetIt.I.get()));
+
   runApp(const MyApp());
 }
 

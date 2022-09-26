@@ -34,7 +34,12 @@ class PokemonModel {
   String? name;
   String? url;
 
-  PokemonModel({this.name, this.url});
+  String? image;
+  List<dynamic>? types;
+  String? height;
+  String? weight;
+
+  PokemonModel({this.name, this.url, this.image, this.types, this.height, this.weight});
 
   PokemonModel.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -46,5 +51,12 @@ class PokemonModel {
     data['name'] = name;
     data['url'] = url;
     return data;
+  }
+
+  void extendFromJson(Map<String, dynamic> json) {
+    image = json['image'];
+    types = json['types'];
+    height = json['height'].toString();
+    weight = json['weight'].toString();
   }
 }
