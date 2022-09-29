@@ -35,12 +35,11 @@ class _InfoPageState extends State<InfoPage> {
               final PokemonModel pokemonInfo = snapshot.data!;
               return Column(
                 children: [
-
                   ...List.generate(
                     pokemonInfo.types?.length ?? 0,
                     (index) => Column(
                       children: [
-                        Text('${pokemonInfo.types?[index]['type']['name']}'),
+                        Text('${pokemonInfo.types?[index]}'),
                       ],
                     ),
                   ),

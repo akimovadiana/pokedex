@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pokedex/database/db_helper.dart';
 import 'package:pokedex/home/data/model/pokemon_model.dart';
 import 'package:pokedex/home/presentation/view_model/home_view_model.dart';
 import 'package:pokedex/info/presentation/page/info_page.dart';
@@ -13,10 +14,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late HomeViewModel homeModel;
+  late DBHelper database;
 
   @override
   void initState() {
     homeModel = GetIt.I.get()..getPage();
+    database = GetIt.I.get();
     super.initState();
   }
 
@@ -24,18 +27,26 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pokedex'),
+        title: const Text('Pokédex'),
       ),
       body: StreamBuilder(
         stream: homeModel.dataStream,
         builder: (context, AsyncSnapshot<ContentModel?> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data!.results?.isNotEmpty ?? false) {
-              final List<PokemonModel> results = snapshot.data!.results!;
+          if (snapshot.hasData || snapshot.error.runtimeType == List<dynamic>) {
+            if (snapshot.hasError &&
+                    (snapshot.error as List<dynamic>).isNotEmpty ||
+                (snapshot.data!.results?.isNotEmpty ?? false)) {
+              List<dynamic> results = [];
+              if (snapshot.hasData) {
+                results = snapshot.data!.results!;
+              } else if (snapshot.hasError) {
+                results = snapshot.error as List<dynamic>;
+              }
               return Scaffold(
                 persistentFooterButtons: [
                   IconButton(
-                    enableFeedback: snapshot.data?.previous?.isNotEmpty ?? false,
+                    enableFeedback:
+                        snapshot.data?.previous?.isNotEmpty ?? false,
                     onPressed: () {
                       homeModel.getPage(false);
                     },
@@ -47,20 +58,7 @@ class _HomePageState extends State<HomePage> {
                     icon: const Icon(Icons.arrow_forward),
                   ),
                 ],
-                body: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: results.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute<void>(
-                          builder: (BuildContext context) => InfoPage(results[index]),
-                        ));
-                      },
-                      title: Text('${results[index].name}'),
-                    );
-                  },
-                ),
+                body: buildList(results),
               );
             }
             return const Text('Error: something went wrong');
@@ -72,4 +70,22 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  Widget buildList(List<dynamic> results) => ListView.builder(
+        shrinkWrap: true,
+        itemCount: results.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => InfoPage(results[index]),
+                ),
+              );
+            },
+            title: Text('${results[index].name}'),
+          );
+        },
+      );
 }

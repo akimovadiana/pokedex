@@ -1,62 +1,74 @@
-class ContentModel {
+import 'package:pokedex/database/db_helper.dart';
+
+class ContentModel implements ModelOfDB {
   int? count;
   String? next;
   String? previous;
   List<PokemonModel>? results;
 
-  ContentModel({this.count, this.next, this.previous, this.results});
-
-  ContentModel.fromJson(Map<String, dynamic> json) {
-    count = json['count'];
-    next = json['next'];
-    previous = json['previous'];
+  @override
+  void fromJson(Map<String, dynamic> json) {
+    this
+      ..count = json['count']
+      ..next = json['next']
+      ..previous = json['previous'];
     if (json['results'] != null) {
-      results = <PokemonModel>[];
+      final results = <PokemonModel>[];
       json['results'].forEach((v) {
-        results!.add(PokemonModel.fromJson(v));
+        results.add(PokemonModel()..fromJson(v));
       });
+      this.results = results;
     }
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['count'] = count;
-    data['next'] = next;
-    data['previous'] = previous;
-    if (results != null) {
-      data['results'] = results!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+  @override
+  Map<String, dynamic> toJson() => {
+        'count': count,
+        'next': next,
+        'previous': previous,
+        // 'results': results?.map((v) => v.toJson()).toList(),
+      };
 }
 
-class PokemonModel {
+class PokemonModel implements ModelOfDB {
   String? name;
   String? url;
 
   String? image;
-  List<dynamic>? types;
+  List<String>? types;
   String? height;
   String? weight;
 
-  PokemonModel({this.name, this.url, this.image, this.types, this.height, this.weight});
-
-  PokemonModel.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    url = json['url'];
+  @override
+  void fromJson(Map<String, dynamic> json) {
+    this
+      ..url = json['url']
+      ..name = json['name']
+      ..types = json['types']?.split(';')
+      ..height = json['height']
+      ..weight = json['weight'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['url'] = url;
-    return data;
-  }
+  @override
+  Map<String, dynamic> toJson() => {
+        'url': url,
+        'name': name,
+        'types': types?.join(';'),
+        'height': height,
+        'weight': weight,
+      };
 
   void extendFromJson(Map<String, dynamic> json) {
     image = json['image'];
-    types = json['types'];
     height = json['height'].toString();
     weight = json['weight'].toString();
+
+    if (json['types']?.isNotEmpty) {
+      final list = <String>[];
+      for (var item in json['types']) {
+        list.add(item['type']['name'] ?? '');
+      }
+      types = list;
+    }
   }
 }
