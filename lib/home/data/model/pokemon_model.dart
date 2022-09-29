@@ -44,6 +44,7 @@ class PokemonModel implements ModelOfDB {
     this
       ..url = json['url']
       ..name = json['name']
+      ..image = json['image']
       ..types = json['types']?.split(';')
       ..height = json['height']
       ..weight = json['weight'];

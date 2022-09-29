@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pokedex/database/db_helper.dart';
 import 'package:pokedex/home/data/model/pokemon_model.dart';
+import 'package:pokedex/home/presentation/ui/custom_grid.dart';
 import 'package:pokedex/home/presentation/view_model/home_view_model.dart';
 import 'package:pokedex/info/presentation/page/info_page.dart';
 
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pokédex'),
+        title: const Text('Pokedex'),
       ),
       body: StreamBuilder(
         stream: homeModel.dataStream,
@@ -71,11 +72,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildList(List<dynamic> results) => ListView.builder(
+  Widget buildList(List<dynamic> results) => GridView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         shrinkWrap: true,
         itemCount: results.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
+        ),
         itemBuilder: (context, index) {
-          return ListTile(
+          return CustomGrid(
             onTap: () {
               Navigator.push(
                 context,
@@ -84,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             },
-            title: Text('${results[index].name}'),
+            name: results[index].name,
           );
         },
       );
