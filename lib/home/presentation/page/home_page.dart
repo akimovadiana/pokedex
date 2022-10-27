@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pokedex/config/colors.dart';
 import 'package:pokedex/database/db_helper.dart';
 import 'package:pokedex/home/data/model/pokemon_model.dart';
-import 'package:pokedex/home/presentation/ui/custom_grid.dart';
+import 'package:pokedex/home/presentation/ui/home_ui.dart';
 import 'package:pokedex/home/presentation/view_model/home_view_model.dart';
 import 'package:pokedex/info/presentation/page/info_page.dart';
 
@@ -43,23 +44,42 @@ class _HomePageState extends State<HomePage> {
               } else if (snapshot.hasError) {
                 results = snapshot.error as List<dynamic>;
               }
-              return Scaffold(
-                persistentFooterButtons: [
-                  IconButton(
-                    enableFeedback:
-                        snapshot.data?.previous?.isNotEmpty ?? false,
-                    onPressed: () {
-                      homeModel.getPage(false);
-                    },
-                    icon: const Icon(Icons.arrow_back),
+              return Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      ColorList.lightBlue,
+                      ColorList.blue,
+                    ],
                   ),
-                  IconButton(
-                    enableFeedback: snapshot.data?.next?.isNotEmpty ?? false,
-                    onPressed: homeModel.getPage,
-                    icon: const Icon(Icons.arrow_forward),
-                  ),
-                ],
-                body: buildList(results),
+                ),
+                child: Scaffold(
+                  backgroundColor: ColorList.transparent,
+                  persistentFooterButtons: [
+                    Row(
+                      children: [
+                        IconButton(
+                          enableFeedback:
+                              snapshot.data?.previous?.isNotEmpty ?? false,
+                          onPressed: () {
+                            homeModel.getPage(false);
+                          },
+                          icon: const Icon(Icons.arrow_back),
+                        ),
+                        Spacer(),
+                        IconButton(
+                          enableFeedback:
+                              snapshot.data?.next?.isNotEmpty ?? false,
+                          onPressed: homeModel.getPage,
+                          icon: const Icon(Icons.arrow_forward),
+                        ),
+                      ],
+                    ),
+                  ],
+                  body: buildList(results),
+                ),
               );
             }
             return const Text('Error: something went wrong');
@@ -82,7 +102,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisSpacing: 20,
         ),
         itemBuilder: (context, index) {
-          return CustomGrid(
+          return HomeUI(
             onTap: () {
               Navigator.push(
                 context,

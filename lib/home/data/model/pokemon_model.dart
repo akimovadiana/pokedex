@@ -60,7 +60,7 @@ class PokemonModel implements ModelOfDB {
       };
 
   void extendFromJson(Map<String, dynamic> json) {
-    image = json['image'];
+    image = json['sprites']['front_default'];
     height = json['height'].toString();
     weight = json['weight'].toString();
 

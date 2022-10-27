@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pokedex/config/colors.dart';
 import 'package:pokedex/home/data/model/pokemon_model.dart';
-import 'package:pokedex/info/presentation/ui/custom_info.dart';
+import 'package:pokedex/info/presentation/ui/info_ui.dart';
 import 'package:pokedex/info/presentation/view_model/info_view_model.dart';
 
 class InfoPage extends StatefulWidget {
@@ -35,7 +35,9 @@ class _InfoPageState extends State<InfoPage> {
           if (snapshot.hasData) {
             if (snapshot.data!.url?.isNotEmpty ?? false) {
               final PokemonModel pokemonInfo = snapshot.data!;
-              return CustomInfo(
+              return InfoUI(
+                name: '${pokemonInfo.name}',
+                image: '${pokemonInfo.image}',
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -52,11 +54,17 @@ class _InfoPageState extends State<InfoPage> {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: 50,
+                    ),
                     Text(
                       'Pokemon weight: ${pokemonInfo.weight} kg',
                       style: TextStyle(
                         color: ColorList.white,
                       ),
+                    ),
+                    SizedBox(
+                      height: 50,
                     ),
                     Text(
                       'Pokemon height: ${pokemonInfo.height} cm',

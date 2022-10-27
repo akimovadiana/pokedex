@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/config/colors.dart';
 
-class CustomGrid extends StatelessWidget {
-  const CustomGrid({
+class HomeUI extends StatelessWidget {
+  const HomeUI({
     Key? key,
-    this.image,
     this.name,
     required this.onTap,
   }) : super(key: key);
 
-  final String? image;
   final String? name;
   final VoidCallback onTap;
 
@@ -19,14 +17,7 @@ class CustomGrid extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomRight,
-            colors: [
-              ColorList.lightGrey,
-              ColorList.darkGrey,
-            ],
-          ),
+          color: ColorList.transparentBlack,
           border: Border.all(
             color: ColorList.black,
             width: 2,
