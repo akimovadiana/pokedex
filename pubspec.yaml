@@ -16,6 +16,8 @@ dependencies:
   rxdart: ^0.27.5
   sqflite: ^2.1.0
   path:
+  image_pixels: ^3.0.0
+  simple_shadow: ^0.3.0
 
   cupertino_icons: ^1.0.2
 

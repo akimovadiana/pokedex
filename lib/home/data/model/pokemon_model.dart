@@ -1,34 +1,34 @@
 import 'package:pokedex/database/db_helper.dart';
 
-class ContentModel implements ModelOfDB {
-  int? count;
-  String? next;
-  String? previous;
-  List<PokemonModel>? results;
-
-  @override
-  void fromJson(Map<String, dynamic> json) {
-    this
-      ..count = json['count']
-      ..next = json['next']
-      ..previous = json['previous'];
-    if (json['results'] != null) {
-      final results = <PokemonModel>[];
-      json['results'].forEach((v) {
-        results.add(PokemonModel()..fromJson(v));
-      });
-      this.results = results;
-    }
-  }
-
-  @override
-  Map<String, dynamic> toJson() => {
-        'count': count,
-        'next': next,
-        'previous': previous,
-        // 'results': results?.map((v) => v.toJson()).toList(),
-      };
-}
+// class ContentModel implements ModelOfDB {
+//   int? count;
+//   String? next;
+//   String? previous;
+//   List<PokemonModel>? results;
+//
+//   @override
+//   void fromJson(Map<String, dynamic> json) {
+//     this
+//       ..count = json['count']
+//       ..next = json['next']
+//       ..previous = json['previous'];
+//     if (json['results'] != null) {
+//       final results = <PokemonModel>[];
+//       json['results'].forEach((v) {
+//         results.add(PokemonModel()..fromJson(v));
+//       });
+//       this.results = results;
+//     }
+//   }
+//
+//   @override
+//   Map<String, dynamic> toJson() => {
+//         'count': count,
+//         'next': next,
+//         'previous': previous,
+//         // 'results': results?.map((v) => v.toJson()).toList(),
+//       };
+// }
 
 class PokemonModel implements ModelOfDB {
   String? name;
@@ -60,7 +60,7 @@ class PokemonModel implements ModelOfDB {
       };
 
   void extendFromJson(Map<String, dynamic> json) {
-    image = json['sprites']['front_default'];
+    image = json['sprites']['other']['home']['front_default'];
     height = json['height'].toString();
     weight = json['weight'].toString();
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:pokedex/database/db_helper.dart';
+// import 'package:pokedex/database/db_helper.dart';
 import 'package:pokedex/domain/repository/api_repository.dart';
 import 'package:pokedex/home/data/model/pokemon_model.dart';
 import 'package:rxdart/subjects.dart';
@@ -13,10 +13,11 @@ abstract class InfoViewModel {
 }
 
 class InfoViewModelImpl implements InfoViewModel {
-  InfoViewModelImpl(this._apiRepository, this._database);
+  InfoViewModelImpl(this._apiRepository);
 
   final ApiRepository _apiRepository;
-  final DBHelper _database;
+
+  // final DBHelper _database;
 
   final _behaviorSubject = BehaviorSubject<PokemonModel?>();
 
@@ -32,7 +33,7 @@ class InfoViewModelImpl implements InfoViewModel {
       if (body.isNotEmpty) {
         try {
           _behaviorSubject.add(model..extendFromJson(body));
-          await _database.insert(DBTables.pokemons, model);
+          // await _database.insert(DBTables.pokemons, model);
         } catch (e) {}
       }
     }

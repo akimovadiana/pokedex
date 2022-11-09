@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pokedex/database/db_helper.dart';
+
+// import 'package:pokedex/database/db_helper.dart';
 import 'package:pokedex/domain/repository/api_repository.dart';
 import 'package:pokedex/data/repository/api_repository_impl.dart';
 import 'package:pokedex/home/presentation/page/home_page.dart';
@@ -11,16 +12,15 @@ import 'package:pokedex/info/presentation/view_model/info_view_model.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final DBHelperImpl dataBase = DBHelperImpl();
+  // final DBHelperImpl dataBase = DBHelperImpl();
 
-  GetIt.I.registerSingleton<DBHelper>(dataBase);
+  // GetIt.I.registerSingleton<DBHelper>(dataBase);
   GetIt.I.registerSingleton<ApiRepository>(ApiRepositoryImpl());
-  GetIt.I.registerFactory<HomeViewModel>(
-      () => HomeViewModelImpl(GetIt.I.get(), GetIt.I.get()));
-  GetIt.I.registerSingleton<InfoViewModel>(
-      InfoViewModelImpl(GetIt.I.get(), GetIt.I.get()));
+  GetIt.I
+      .registerFactory<HomeViewModel>(() => HomeViewModelImpl(GetIt.I.get()));
+  GetIt.I.registerSingleton<InfoViewModel>(InfoViewModelImpl(GetIt.I.get()));
 
-  dataBase.initDB();
+  // dataBase.initDB();
 
   runApp(const MyApp());
 }
