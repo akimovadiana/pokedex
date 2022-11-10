@@ -34,61 +34,58 @@ class InfoUI extends StatelessWidget {
               ],
             ),
           ),
-          child: Scaffold(
-            backgroundColor: ColorList.transparent,
-            body: Column(
-              children: [
-                SizedBox(
-                  height: 150,
-                ),
-                Expanded(
+          child: Stack(
+            alignment: Alignment.topCenter,
+            fit: StackFit.expand,
+            children: [
+              Positioned(
+                top: 150,
+                child: SimpleShadow(
                   child: Text(
                     name,
                     style: TextStyle(
                       fontSize: 48,
                     ),
                   ),
+                  offset: Offset(5, 5),
+                  sigma: 10,
+                  opacity: 0.7,
                 ),
-                Row(
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  fit: StackFit.passthrough,
+                  clipBehavior: Clip.none,
                   children: [
-                    Expanded(
-                      child: Stack(
-                        alignment: Alignment.center,
-                        fit: StackFit.passthrough,
-                        clipBehavior: Clip.none,
-                        children: [
-                          Container(
-                            height: 360,
-                            width: size.width,
-                            decoration: const BoxDecoration(
-                              color: ColorList.black,
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(35),
-                              ),
-                            ),
-                            child: Center(
-                              child: child,
-                            ),
-                          ),
-                          Positioned(
-                            top: -200,
-                            child: SimpleShadow(
-                              child: Image.network(
-                                image,
-                                height: 300,
-                                fit: BoxFit.fitHeight,
-                              ),
-                              offset: Offset(5,5),
-                              sigma: 10,
-                            ),
-                          ),
-                        ],
+                    Container(
+                      height: 360,
+                      width: size.width,
+                      decoration: const BoxDecoration(
+                        color: ColorList.black,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(35),
+                        ),
+                      ),
+                      child: child,
+                    ),
+                    Positioned(
+                      top: -200,
+                      child: SimpleShadow(
+                        child: Image.network(
+                          image,
+                          height: 300,
+                          fit: BoxFit.fitHeight,
+                        ),
+                        offset: Offset(5, 5),
+                        sigma: 10,
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },

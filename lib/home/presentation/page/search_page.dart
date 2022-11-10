@@ -49,27 +49,33 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
             ),
-            child: Scaffold(
-              backgroundColor: ColorList.transparent,
-              body: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: TextField(
-                      controller: homeModel.queryController,
-                    ),
+            child: Column(
+              children: [
+                SizedBox(height: 20),
+                Text(
+                  'Find a Pokemon by name',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
                   ),
-                  snapshot.hasData
-                      ? Expanded(
-                          child: snapshot.data!.isNotEmpty
-                              ? buildList(snapshot.data!)
-                              : Text('No results'),
-                        )
-                      : homeModel.queryController.value.text.isNotEmpty
-                          ? CircularProgressIndicator()
-                          : SizedBox.shrink(),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextField(
+                    controller: homeModel.queryController,
+                    cursorColor: ColorList.black,
+                  ),
+                ),
+                snapshot.hasData
+                    ? Expanded(
+                        child: snapshot.data!.isNotEmpty
+                            ? buildList(snapshot.data!)
+                            : Text('No results were found'),
+                      )
+                    : homeModel.queryController.value.text.isNotEmpty
+                        ? CircularProgressIndicator()
+                        : SizedBox.shrink(),
+              ],
             ),
           );
         },

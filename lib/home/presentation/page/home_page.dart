@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pokedex/config/colors.dart';
+
 // import 'package:pokedex/database/db_helper.dart';
 import 'package:pokedex/home/data/model/pokemon_model.dart';
 import 'package:pokedex/home/presentation/page/search_page.dart';

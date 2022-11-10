@@ -43,41 +43,74 @@ class _InfoPageState extends State<InfoPage> {
               return InfoUI(
                 name: '${pokemonInfo.name}',
                 image: '${pokemonInfo.image}',
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ...List.generate(
-                      pokemonInfo.types?.length ?? 0,
-                      (index) => Column(
-                        children: [
-                          Text(
-                            'Pokemon type: ${pokemonInfo.types?[index]}',
-                            style: TextStyle(
-                              color: ColorList.white,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(50, 150, 50, 50),
+                  child: Expanded(
+                    child: Row(
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Type:',
+                              style: TextStyle(
+                                color: ColorList.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
+                            Text(
+                              'Weight:',
+                              style: TextStyle(
+                                color: ColorList.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Height:',
+                              style: TextStyle(
+                                color: ColorList.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              ...List.generate(
+                                pokemonInfo.types?.length ?? 0,
+                                (index) => Column(
+                                  children: [
+                                    Text(
+                                      '${pokemonInfo.types?[index]}',
+                                      style: TextStyle(
+                                        color: ColorList.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                '${pokemonInfo.weight} kg',
+                                style: TextStyle(
+                                  color: ColorList.white,
+                                ),
+                              ),
+                              Text(
+                                '${pokemonInfo.height} cm',
+                                style: TextStyle(
+                                  color: ColorList.white,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Text(
-                      'Pokemon weight: ${pokemonInfo.weight} kg',
-                      style: TextStyle(
-                        color: ColorList.white,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Text(
-                      'Pokemon height: ${pokemonInfo.height} cm',
-                      style: TextStyle(
-                        color: ColorList.white,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               );
             }
