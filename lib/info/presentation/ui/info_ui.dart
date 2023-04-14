@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_pixels/image_pixels.dart';
+import 'package:pokedex/config/assets.dart';
 import 'package:pokedex/config/colors.dart';
 import 'package:simple_shadow/simple_shadow.dart';
 
@@ -17,7 +18,9 @@ class InfoUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery
+        .of(context)
+        .size;
     final NetworkImage img = NetworkImage(image);
 
     return ImagePixels(
@@ -38,18 +41,29 @@ class InfoUI extends StatelessWidget {
             alignment: Alignment.topCenter,
             fit: StackFit.expand,
             children: [
-              Positioned(
-                top: 150,
-                child: SimpleShadow(
-                  child: Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 48,
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 130, left: 10, right: 10),
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    child: SimpleShadow(
+                      child: Text(
+                        name,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 48,
+                        ),
+                      ),
+                      offset: Offset(5, 5),
+                      sigma: 10,
+                      opacity: 0.7,
                     ),
                   ),
-                  offset: Offset(5, 5),
-                  sigma: 10,
-                  opacity: 0.7,
                 ),
               ),
               Align(
@@ -75,6 +89,7 @@ class InfoUI extends StatelessWidget {
                       child: SimpleShadow(
                         child: Image.network(
                           image,
+                          errorBuilder: (_, __, ___) => Image.asset(Assets.launchIcon),
                           height: 300,
                           fit: BoxFit.fitHeight,
                         ),

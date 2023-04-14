@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pokedex/config/colors.dart';
+import 'package:pokedex/config/const.dart';
 import 'package:pokedex/home/data/model/pokemon_model.dart';
 import 'package:pokedex/home/presentation/ui/home_ui.dart';
 import 'package:pokedex/home/presentation/view_model/home_view_model.dart';
@@ -102,7 +103,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               );
             },
-            name: results[index].name,
+            name: results[index].name ?? Consts.onEmptyString,
           );
         },
       );

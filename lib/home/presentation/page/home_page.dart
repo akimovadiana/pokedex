@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pokedex/config/colors.dart';
+import 'package:pokedex/config/const.dart';
 
 // import 'package:pokedex/database/db_helper.dart';
 import 'package:pokedex/home/data/model/pokemon_model.dart';
@@ -120,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             },
-            name: results[index].name,
+            name: results[index].name ?? Consts.onEmptyString,
           );
         },
       );
