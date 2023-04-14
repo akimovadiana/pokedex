@@ -1,7 +1,7 @@
 import 'dart:async';
 
 // import 'package:path/path.dart';
-// import 'package:pokedex/home/data/model/pokemon_model.dart';
+// import 'package:pokedex/home/data/model/pokemon_entity.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBTables {

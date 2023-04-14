@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/config/colors.dart';
+import 'package:pokedex/core/const/app_colors.dart';
 
-class HomeUI extends StatelessWidget {
-  const HomeUI({
+class MenuItem extends StatelessWidget {
+  const MenuItem({
     Key? key,
     required this.name,
     required this.onTap,
@@ -17,9 +17,9 @@ class HomeUI extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: ColorList.transparentBlack,
+          color: AppColors.transparentBlack,
           border: Border.all(
-            color: ColorList.black,
+            color: AppColors.black,
             width: 2,
           ),
           borderRadius: const BorderRadius.all(Radius.circular(25)),

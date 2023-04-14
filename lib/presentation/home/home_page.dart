@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:pokedex/config/colors.dart';
-import 'package:pokedex/config/const.dart';
-
-// import 'package:pokedex/database/db_helper.dart';
-import 'package:pokedex/home/data/model/pokemon_model.dart';
-import 'package:pokedex/home/presentation/page/search_page.dart';
-import 'package:pokedex/home/presentation/ui/home_ui.dart';
-import 'package:pokedex/home/presentation/view_model/home_view_model.dart';
-import 'package:pokedex/info/presentation/page/info_page.dart';
+import 'package:get/get.dart';
+import 'package:pokedex/core/const/app_colors.dart';
+import 'package:pokedex/core/const/other.dart';
+import 'package:pokedex/domain/entity/pokemon_entity.dart';
+import 'package:pokedex/presentation/home/home_bloc.dart';
+import 'package:pokedex/presentation/info_card/info_card_bloc.dart';
+import 'package:pokedex/presentation/info_card/info_card_page.dart';
+import 'package:pokedex/presentation/widget/menu_item.dart';
 import 'package:pokedex/util.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,7 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late HomeViewModel homeModel;
+  late IHomeBloc bloc;
 
   // late DBHelper database;
 
@@ -29,7 +27,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    homeModel = GetIt.I.get()..getPokemons();
+    bloc = Get.find()..getPokemons();
     // database = GetIt.I.get();
     scrollController.addListener(onScroll);
     super.initState();
@@ -48,19 +46,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pokedex'),
-        actions: [
-          IconButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => SearchPage()),
-            ),
-            icon: Icon(Icons.search),
-          ),
-        ],
       ),
       body: StreamBuilder(
-        stream: homeModel.dataStream,
-        builder: (context, AsyncSnapshot<List<PokemonModel>?> snapshot) {
+        stream: bloc.dataStream,
+        builder: (context, AsyncSnapshot<List<PokemonEntity>?> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.isNotEmpty) {
               return Container(
@@ -69,8 +58,8 @@ class _HomePageState extends State<HomePage> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomRight,
                     colors: [
-                      ColorList.lightBlue,
-                      ColorList.blue,
+                      AppColors.lightBlue,
+                      AppColors.blue,
                     ],
                   ),
                 ),
@@ -101,7 +90,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildList(List<PokemonModel> results) => GridView.builder(
+  Widget buildList(List<PokemonEntity> results) => GridView.builder(
         controller: scrollController,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         shrinkWrap: true,
@@ -112,16 +101,17 @@ class _HomePageState extends State<HomePage> {
           mainAxisSpacing: 20,
         ),
         itemBuilder: (context, index) {
-          return HomeUI(
+          return MenuItem(
             onTap: () {
+              Get.find<IInfoCardBloc>().getInfo(results[index]);
               Navigator.push(
                 context,
                 MaterialPageRoute<void>(
-                  builder: (BuildContext context) => InfoPage(results[index]),
+                  builder: (BuildContext context) => InfoCardPage(),
                 ),
               );
             },
-            name: results[index].name ?? Consts.onEmptyString,
+            name: results[index].name ?? Other.onEmptyString,
           );
         },
       );
@@ -130,7 +120,7 @@ class _HomePageState extends State<HomePage> {
     if (!isLoading && scrollController.position.extentAfter < 100) {
       isLoading = true;
       notifier.notify();
-      homeModel.getPokemons().then((_) {
+      bloc.getPokemons().then((_) {
         isLoading = false;
         notifier.notify();
       });
