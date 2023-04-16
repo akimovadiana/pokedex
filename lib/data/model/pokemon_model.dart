@@ -1,4 +1,4 @@
-import 'package:pokedex/database/db_helper.dart';
+// import 'package:pokedex/database/db_helper.dart';
 
 // class ContentModel implements ModelOfDB {
 //   int? count;
@@ -30,17 +30,15 @@ import 'package:pokedex/database/db_helper.dart';
 //       };
 // }
 
-class PokemonModel implements ModelOfDB {
-  String? name;
+class PokemonModel {
   String? url;
-
+  String? name;
   String? image;
   List<String>? types;
   String? height;
   String? weight;
 
-  @override
-  void fromJson(Map<String, dynamic> json) {
+  PokemonModel.fromJson(Map<String, dynamic> json) {
     this
       ..url = json['url']
       ..name = json['name']
@@ -50,7 +48,6 @@ class PokemonModel implements ModelOfDB {
       ..weight = json['weight'];
   }
 
-  @override
   Map<String, dynamic> toJson() => {
         'url': url,
         'name': name,
@@ -58,18 +55,4 @@ class PokemonModel implements ModelOfDB {
         'height': height,
         'weight': weight,
       };
-
-  void extendFromJson(Map<String, dynamic> json) {
-    image = json['sprites']['other']['home']['front_default'];
-    height = json['height'].toString();
-    weight = json['weight'].toString();
-
-    if (json['types']?.isNotEmpty) {
-      final list = <String>[];
-      for (var item in json['types']) {
-        list.add(item['type']['name'] ?? '');
-      }
-      types = list;
-    }
-  }
 }

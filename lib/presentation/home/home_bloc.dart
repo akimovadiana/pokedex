@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:pokedex/domain/entity/pokemon_entity.dart';
-import 'package:pokedex/domain/repository/i_api_repository.dart';
 import 'package:pokedex/domain/use_case/get_pokemons_use_case.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -24,11 +23,9 @@ abstract class IHomeBloc {
 }
 
 class HomeBloc implements IHomeBloc {
-  final IApiRepository _apiRepository;
   final GetPokemonsUseCase _getPokemonsUseCase;
 
   HomeBloc(
-    this._apiRepository,
     this._getPokemonsUseCase,
   );
 
@@ -53,7 +50,8 @@ class HomeBloc implements IHomeBloc {
   }
 
   final queryController = TextEditingController();
-  final _querySubject = BehaviorSubject<String>();
+
+  // final _querySubject = BehaviorSubject<String>();
   StreamSubscription? _subscription;
 
   @override

@@ -14,7 +14,7 @@ abstract class DependencyInjections {
     Get.put<IApiRepository>(ApiRepository(Get.find()));
     Get.put(GetPokemonsUseCase(Get.find()));
     Get.put(GetPokemonDetailsUseCase(Get.find()));
-    Get.put<IHomeBloc>(HomeBloc(Get.find(), Get.find()));
+    Get.put<IHomeBloc>(HomeBloc(Get.find()));
     Get.put<IInfoCardBloc>(InfoCardBloc(Get.find()));
   }
 }

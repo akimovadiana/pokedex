@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'package:pokedex/domain/entity/pokemon_entity.dart';
+import 'package:pokedex/domain/entity/pokemon_info_entity.dart';
 import 'package:pokedex/domain/use_case/get_pokemon_details_use_case.dart';
 import 'package:rxdart/subjects.dart';
 
 abstract class IInfoCardBloc {
-  Stream<PokemonEntity?> get dataStream;
+  Stream<PokemonInfoEntity?> get dataStream;
 
   Future<void> getInfo(PokemonEntity entity);
 }
@@ -16,20 +17,23 @@ class InfoCardBloc implements IInfoCardBloc {
 
   // final DBHelper _database;
 
-  final _behaviorSubject = BehaviorSubject<PokemonEntity?>();
+  final _behaviorSubject = BehaviorSubject<PokemonInfoEntity?>();
 
   @override
-  Stream<PokemonEntity?> get dataStream => _behaviorSubject.stream;
+  Stream<PokemonInfoEntity?> get dataStream => _behaviorSubject.stream;
 
   @override
   Future<void> getInfo(PokemonEntity entity) async {
     _behaviorSubject.add(null);
     {
       try {
-        var map = await _getPokemonDetailsUseCase.execute(entity.url);
-        _behaviorSubject.add(entity..extendFromJson(map));
+        var pokemonInfoEntity =
+            await _getPokemonDetailsUseCase.execute(entity.url);
+        _behaviorSubject.add(pokemonInfoEntity);
         // await _database.insert(DBTables.pokemons, model);
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }

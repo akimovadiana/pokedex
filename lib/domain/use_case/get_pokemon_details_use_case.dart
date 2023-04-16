@@ -1,3 +1,4 @@
+import 'package:pokedex/domain/entity/pokemon_info_entity.dart';
 import 'package:pokedex/domain/repository/i_api_repository.dart';
 
 class GetPokemonDetailsUseCase {
@@ -5,6 +6,6 @@ class GetPokemonDetailsUseCase {
 
   GetPokemonDetailsUseCase(this._apiRepository);
 
-  Future<Map<String, dynamic>> execute([String? url]) =>
+  Future<PokemonInfoEntity> execute([String? url]) =>
       _apiRepository.getPokemonDetails(url);
 }

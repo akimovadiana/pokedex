@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:pokedex/core/const/other.dart';
 import 'package:pokedex/data/interface/i_remote_data_source.dart';
+import 'package:pokedex/data/model/pokemon_info_model.dart';
 import 'package:pokedex/data/model/pokemon_model.dart';
 
 class RemoteDataSource implements IRemoteDataSource {
@@ -12,15 +13,16 @@ class RemoteDataSource implements IRemoteDataSource {
     final results = <PokemonModel>[];
     if (parsed['results']?.isNotEmpty ?? false) {
       parsed['results'].forEach((v) {
-        results.add(PokemonModel()..fromJson(v));
+        results.add(PokemonModel.fromJson(v));
       });
     }
     return results;
   }
 
   @override
-  Future<Map<String, dynamic>> getPokemonDetails([String? url]) async {
+  Future<PokemonInfoModel> getPokemonDetails([String? url]) async {
     Response response = await get(Uri.parse(url ?? Other.defaultUrl));
-    return jsonDecode(response.body);
+    var parsed = jsonDecode(response.body);
+    return PokemonInfoModel.fromJson(parsed);
   }
 }

@@ -1,10 +1,9 @@
-class PokemonEntity {
+class PokemonInfoEntity {
   String? name;
-  String? url;
   String? image;
   List<String>? types;
   String? height;
   String? weight;
 
-  PokemonEntity();
+  PokemonInfoEntity();
 }
