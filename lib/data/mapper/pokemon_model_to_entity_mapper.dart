@@ -7,6 +7,5 @@ abstract class PokemonModelToEntityMapper {
     ..image = model.image
     ..height = model.height
     ..weight = model.weight
-    ..types = model.types
-    ..url = model.url;
+    ..types = model.types;
 }
