@@ -7,7 +7,6 @@ import 'package:pokedex/presentation/home/home_bloc.dart';
 import 'package:pokedex/presentation/info_card/info_card_bloc.dart';
 import 'package:pokedex/presentation/info_card/info_card_page.dart';
 import 'package:pokedex/presentation/widget/menu_item.dart';
-import 'package:pokedex/util.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,26 +18,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late IHomeBloc bloc;
 
-  // late DBHelper database;
-
-  final scrollController = ScrollController();
-  bool isLoading = false;
-  final notifier = CustomNotifier();
-
   @override
   void initState() {
     bloc = Get.find()..getPokemons();
-    // database = GetIt.I.get();
-    scrollController.addListener(onScroll);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    scrollController
-      ..removeListener(onScroll)
-      ..dispose();
-    super.dispose();
   }
 
   @override
@@ -63,20 +46,12 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: buildList(snapshot.data!),
-                    ),
-                    if (isLoading)
-                      AnimatedBuilder(
-                          animation: notifier,
-                          builder: (context, _) {
-                            return isLoading
-                                ? CircularProgressIndicator()
-                                : SizedBox.shrink();
-                          }),
+                child: Scaffold(
+                  backgroundColor: AppColors.transparent,
+                  persistentFooterButtons: [
+                    buildPages(),
                   ],
+                  body: buildList(snapshot.data!),
                 ),
               );
             }
@@ -91,7 +66,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildList(List<PokemonEntity> results) => GridView.builder(
-        controller: scrollController,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         shrinkWrap: true,
         itemCount: results.length,
@@ -116,14 +90,41 @@ class _HomePageState extends State<HomePage> {
         },
       );
 
-  void onScroll() {
-    if (!isLoading && scrollController.position.extentAfter < 100) {
-      isLoading = true;
-      notifier.notify();
-      bloc.getPokemons().then((_) {
-        isLoading = false;
-        notifier.notify();
-      });
-    }
+  Widget buildPages() {
+    return StreamBuilder(
+        stream: bloc.pageCountStream,
+        builder: (context, AsyncSnapshot<int?> snapshot) {
+          if (snapshot.hasData) {
+            return Row(
+              children: [
+                IconButton(
+                  onPressed: bloc.toPreviousPage,
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: bloc.currentPage == 0
+                        ? AppColors.lightGrey
+                        : AppColors.black,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    '${bloc.currentPage + 1}/${snapshot.data}',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                IconButton(
+                  onPressed: bloc.toNextPage,
+                  icon: Icon(
+                    Icons.arrow_forward,
+                    color: bloc.currentPage + 1 == snapshot.data
+                        ? AppColors.lightGrey
+                        : AppColors.black,
+                  ),
+                ),
+              ],
+            );
+          }
+          return const SizedBox();
+        });
   }
 }

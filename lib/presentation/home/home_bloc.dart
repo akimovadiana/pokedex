@@ -1,25 +1,23 @@
 import 'dart:async';
-import 'package:flutter/widgets.dart';
+import 'package:pokedex/core/const/other.dart';
+import 'package:pokedex/domain/entity/page_entity.dart';
 import 'package:pokedex/domain/entity/pokemon_entity.dart';
 import 'package:pokedex/domain/use_case/get_pokemons_use_case.dart';
+import 'package:pokedex/domain/utils/numeric_util.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class IHomeBloc {
-  // int? get dataStreamCount;
-
   Stream<List<PokemonEntity>?> get dataStream;
 
-  Stream<List<PokemonEntity>?> get searchStream;
+  Stream<int?> get pageCountStream;
 
-  // Future<void> getPage([bool isNext]);
+  int get currentPage;
 
   Future<void> getPokemons();
 
-  TextEditingController get queryController;
+  Future<void> toPreviousPage();
 
-  void startListen();
-
-  void stopListen();
+  Future<void> toNextPage();
 }
 
 class HomeBloc implements IHomeBloc {
@@ -30,83 +28,68 @@ class HomeBloc implements IHomeBloc {
   );
 
   final _dataSubject = BehaviorSubject<List<PokemonEntity>?>();
-  final _searchSubject = BehaviorSubject<List<PokemonEntity>?>();
+  final _pageCountSubject = BehaviorSubject<int?>();
 
   @override
   Stream<List<PokemonEntity>?> get dataStream => _dataSubject.stream;
 
   @override
-  Stream<List<PokemonEntity>?> get searchStream => _searchSubject.stream;
+  Stream<int?> get pageCountStream => _pageCountSubject.stream;
+
+  int _currentPage = 0;
+
+  int get currentPage => _currentPage;
+
+  final List<PokemonEntity> _pokemonEntityList = [];
 
   @override
   Future<void> getPokemons() async {
     try {
-      var results = await _getPokemonsUseCase
-          .execute(_dataSubject.valueOrNull?.length ?? 0);
-      _dataSubject.add([...(_dataSubject.valueOrNull ?? []), ...results]);
+      PageEntity page =
+          await _getPokemonsUseCase.execute(_pokemonEntityList.length);
+      _pageCountSubject.add(NumericUtil.getPageByCount(page.count));
+
+      _pokemonEntityList.addAll(page.results);
+      if (_pokemonEntityList.isNotEmpty) {
+        _sendList();
+      }
     } catch (e) {
       _onError();
     }
   }
 
-  final queryController = TextEditingController();
-
-  // final _querySubject = BehaviorSubject<String>();
-  StreamSubscription? _subscription;
+  Future<void> _onError() async {}
 
   @override
-  void startListen() {
-    // _searchSubject.add(null);
-    // queryController.addListener(() {
-    //   _querySubject.add(queryController.value.text);
-    // });
-    // _subscription = _querySubject
-    //     .debounce((_) => TimerStream(true, Duration(seconds: 1)))
-    //     .listen(_searchPokemons);
+  Future<void> toNextPage() async {
+    if (_currentPage + 1 < (_pageCountSubject.valueOrNull ?? 0)) {
+      _currentPage++;
+      if (_currentPage * Other.limit < _pokemonEntityList.length) {
+        _sendList();
+      } else {
+        await getPokemons();
+      }
+    }
   }
 
   @override
-  void stopListen() => _subscription?.cancel();
+  Future<void> toPreviousPage() async {
+    if (_currentPage > 0) {
+      _currentPage--;
+      _sendList();
+    }
+  }
 
-  // Future<void> _searchPokemons(String query) async {
-  //   _searchSubject.add(null);
-  //   try {
-  //     if (query.isNotEmpty) {
-  //       final resp = await _apiRepository.searchPokemons();
-  //       if (resp.statusCode == 200) {
-  //         final map = json.decode(resp.body);
-  //         if (map.isNotEmpty) {
-  //           if (map['results'] != null) {
-  //             final results = <PokemonModel>[];
-  //             map['results'].forEach((v) {
-  //               results.add(PokemonModel()..fromJson(v));
-  //             });
-  //             _searchSubject.add(results
-  //                 .where((p) => (p.name?.toLowerCase() ?? '')
-  //                     .contains(query.toLowerCase()))
-  //                 .toList());
-  //           }
-  //         }
-  //       }
-  //     }
-  //   } catch (e) {
-  //     _onError();
-  //   }
-  // }
+  void _sendList() {
+    int end = (_currentPage + 1) * Other.limit;
 
-  Future<void> _onError([bool isNext = true]) async {
-    // _isNext = isNext;
-    // await _database
-    //     .getAll(DBTables.pokemons, isNext, _index, PokemonModel)
-    //     .then((list) {
-    //   if (list.isNotEmpty) {
-    //     _behaviorSubject.addError(list);
-    //     if (_isNext) {
-    //       _index += list.length;
-    //     } else {
-    //       _index -= list.length;
-    //     }
-    //   }
-    // });
+    if (end > _pokemonEntityList.length) end = _pokemonEntityList.length;
+    List<PokemonEntity> list = _pokemonEntityList
+        .getRange(
+          _currentPage * Other.limit,
+          end,
+        )
+        .toList();
+    _dataSubject.add(list);
   }
 }

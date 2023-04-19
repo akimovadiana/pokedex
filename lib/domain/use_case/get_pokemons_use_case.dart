@@ -1,4 +1,4 @@
-import 'package:pokedex/domain/entity/pokemon_entity.dart';
+import 'package:pokedex/domain/entity/page_entity.dart';
 import 'package:pokedex/domain/repository/i_api_repository.dart';
 
 class GetPokemonsUseCase {
@@ -6,6 +6,5 @@ class GetPokemonsUseCase {
 
   GetPokemonsUseCase(this._apiRepository);
 
-  Future<List<PokemonEntity>> execute(int offset) =>
-      _apiRepository.getPokemons(offset);
+  Future<PageEntity> execute(int offset) => _apiRepository.getPokemons(offset);
 }
