@@ -6,13 +6,7 @@ import 'package:pokedex/presentation/home/home_page.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // final DBHelperImpl dataBase = DBHelperImpl();
-
-  // GetIt.I.registerSingleton<DBHelper>(dataBase);
-
   DependencyInjections.init();
-
-  // dataBase.initDB();
 
   runApp(const MyApp());
 }

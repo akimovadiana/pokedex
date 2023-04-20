@@ -14,15 +14,15 @@ class ApiRepository implements IApiRepository {
   );
 
   @override
+  Future<PageEntity> getPokemons(int offset) async {
+    var model = await _remoteDataSource.getPokemons(offset);
+    return PageModelToEntityMapper.execute(model);
+  }
+
+  @override
   Future<PokemonInfoEntity> getPokemonDetails([String? url]) async {
     var model =
         await _remoteDataSource.getPokemonDetails(url ?? Other.defaultUrl);
     return PokemonInfoModelToEntityMapper.execute(model);
-  }
-
-  @override
-  Future<PageEntity> getPokemons(int offset) async {
-    var model = await _remoteDataSource.getPokemons(offset);
-    return PageModelToEntityMapper.execute(model);
   }
 }

@@ -15,8 +15,6 @@ class InfoCardBloc implements IInfoCardBloc {
 
   final GetPokemonDetailsUseCase _getPokemonDetailsUseCase;
 
-  // final DBHelper _database;
-
   final _behaviorSubject = BehaviorSubject<PokemonInfoEntity?>();
 
   @override
@@ -30,7 +28,6 @@ class InfoCardBloc implements IInfoCardBloc {
         var pokemonInfoEntity =
             await _getPokemonDetailsUseCase.execute(entity.url);
         _behaviorSubject.add(pokemonInfoEntity);
-        // await _database.insert(DBTables.pokemons, model);
       } catch (e) {
         print(e);
       }

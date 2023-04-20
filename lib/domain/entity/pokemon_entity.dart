@@ -1,6 +1,6 @@
 class PokemonEntity {
-  String? name;
   String? url;
+  String? name;
   String? image;
   List<String>? types;
   String? height;

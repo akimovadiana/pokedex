@@ -39,7 +39,6 @@ class _InfoCardPageState extends State<InfoCardPage> {
             final Size size = MediaQuery.of(context).size;
             final PokemonInfoEntity pokemonInfoEntity = snapshot.data!;
             final NetworkImage img = NetworkImage('${pokemonInfoEntity.image}');
-
             return ImagePixels(
               imageProvider: img,
               builder: (BuildContext context, ImgDetails img) {
@@ -61,8 +60,7 @@ class _InfoCardPageState extends State<InfoCardPage> {
                       Align(
                         alignment: Alignment.topCenter,
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 130, left: 10, right: 10),
+                          padding: const EdgeInsets.fromLTRB(10, 120, 10, 0),
                           child: Container(
                             alignment: Alignment.topCenter,
                             width: MediaQuery.of(context).size.width,
